@@ -1,11 +1,15 @@
 
 import './App.css';
-import HomePage from './pages/HomePage'; // Importez votre page d'accueil
-
+import HomePage from './pages/HomePage'; 
+import Navbar from './components/Navbar';
+import Footer from './components/Footer'; 
+import logo from './assets/cypher_zero_logo.png'
 function App() {
   return (
     <div className="App">
-      <HomePage />
+      <Navbar logo={logo}/>
+        <HomePage />
+      <Footer />
     </div>
   );
 }

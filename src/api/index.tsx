@@ -1,14 +1,15 @@
 import axios from 'axios';
 import { Block, Transaction, BlockDetails, TransactionDetails } from '../types'; // Assurez-vous d'avoir ces types définis
 
-const API_ENDPOINT = 'https://votre-blockchain-api.com';
+const API_ENDPOINT = 'http://0.0.0.0:3001'; // Remplacez par l'URL de votre API
 
 export const getLatestBlocks = async (): Promise<Block[]> => {
   try {
-    const response = await axios.get(`${API_ENDPOINT}/blocks/latest`);
+    const response = await axios.get(`${API_ENDPOINT}/getLastBlock`);
     // Assurez-vous que cela renvoie un tableau de `Block[]`
     // Vous pourriez avoir besoin de mapper ou d'ajuster les données si leur structure ne correspond pas exactement
     // à votre type `Block`
+    console.log(response);
     return response.data.map((blockData: any): Block => ({
       hash: blockData.hash,
       number: blockData.number,
