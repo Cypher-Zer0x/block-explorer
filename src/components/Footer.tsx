@@ -8,13 +8,10 @@ const Footer: React.FC = () => {
   return (
     <Box
       sx={{
-        position: 'fixed',
-        bottom: 0,
         backgroundColor: 'rgba(18, 18, 18, 0.2)',
         textAlign: 'center',
         padding: '20px',
         width: '100%',
-        minHeight: '100px',
       }}
     >
       <Box

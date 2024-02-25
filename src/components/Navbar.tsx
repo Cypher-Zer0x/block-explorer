@@ -3,6 +3,7 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import SearchBar from '../components/SearchBar/SearchBar';
 
 interface NavbarProps {
   logo: string; // URL ou chemin vers le logo
@@ -11,6 +12,9 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ logo }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const handleSearch = (searchTerm: string) => {
+    console.log('Search term:', searchTerm);
+  };
 
   let logoStyles;
   if (isMobile) {
@@ -40,12 +44,13 @@ const Navbar: React.FC<NavbarProps> = ({ logo }) => {
 
   return (
     <AppBar position="static" sx={{ backgroundColor: 'rgba(18, 18, 18, 0.2)' }}> 
-      <Toolbar>
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}> {/* Utiliser flexbox pour aligner les éléments */}
         <img 
           src={logo} 
           alt="Cypher Zer0x" 
           style={logoStyles}
         />
+        <SearchBar onSearch={handleSearch} />
       </Toolbar>
     </AppBar>
   );

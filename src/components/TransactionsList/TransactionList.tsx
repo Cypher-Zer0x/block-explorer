@@ -1,8 +1,15 @@
-// src/components/TransactionsList/TransactionsList.tsx
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getLatestTransactions } from '../../api';
-import { Transaction } from '../../types'; // Assurez-vous d'importer le type Transaction
+import { Transaction } from '../../types';
+import { styled } from '@mui/system';
+
+const StyledTransactionContainer = styled('div')({
+  border: '1px solid #ccc',
+  borderRadius: '5px',
+  padding: '20px',
+  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', 
+});
 
 const TransactionsList: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -17,7 +24,7 @@ const TransactionsList: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <StyledTransactionContainer> 
       <h2>Latest Transactions</h2>
       <ul>
         {transactions.map((transaction) => (
@@ -26,7 +33,7 @@ const TransactionsList: React.FC = () => {
           </li>
         ))}
       </ul>
-    </div>
+    </StyledTransactionContainer>
   );
 };
 

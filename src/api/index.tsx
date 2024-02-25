@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Block, Transaction, BlockDetails, TransactionDetails } from '../types'; // Assurez-vous d'avoir ces types définis
 
-const API_ENDPOINT = 'http://0.0.0.0:3001'; // Remplacez par l'URL de votre API
+const API_ENDPOINT = 'http://176.146.201.74:3000'; // Remplacez par l'URL de votre API
 
 export const getLatestBlocks = async (): Promise<Block[]> => {
   try {

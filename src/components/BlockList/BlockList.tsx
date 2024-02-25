@@ -1,11 +1,17 @@
-// src/components/BlocksList/BlocksList.tsx
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getLatestBlocks } from '../../api';
 import { Block } from '../../types'; // Importez le type Block
+import { styled } from '@mui/system';
+
+const StyledBlockContainer = styled('div')({
+  border: '1px solid #ccc',
+  borderRadius: '5px',
+  padding: '20px',
+  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', // Ajouter une ombre pour le relief
+});
 
 const BlocksList: React.FC = () => {
-  // Définissez l'état avec le type Block[]
   const [blocks, setBlocks] = useState<Block[]>([]);
 
   useEffect(() => {
@@ -18,7 +24,7 @@ const BlocksList: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <StyledBlockContainer> 
       <h2>Latest Blocks</h2>
       <ul>
         {blocks.map((block) => (
@@ -27,7 +33,7 @@ const BlocksList: React.FC = () => {
           </li>
         ))}
       </ul>
-    </div>
+    </StyledBlockContainer>
   );
 };
 

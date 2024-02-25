@@ -4,21 +4,16 @@ import { styled } from '@mui/system';
 import BlockchainOverview from '../components/BlockchainOverview';
 import BlocksList from '../components/BlockList/BlockList';
 import TransactionsList from '../components/TransactionsList/TransactionList';
-import SearchBar from '../components/SearchBar/SearchBar';
 
 // Définir un composant de conteneur stylisé avec Emotion pour ajouter un espacement bas
 const SpacedContainer = styled(Container)(({ theme }) => ({
   marginBottom: theme.spacing(4),
+  marginTop: '10px', // Ajouter une marge de 10px en haut du conteneur
 }));
 
 const HomePage: React.FC = () => {
-  const handleSearch = (searchTerm: string) => {
-    console.log('Search term:', searchTerm);
-  };
-
   return (
-    <Container maxWidth="lg">
-      <SearchBar onSearch={handleSearch} />
+    <Container maxWidth="lg" sx={{ marginBottom: '50px' }}> {/* Ajoutez une marge en bas */}
       <SpacedContainer>
         <BlockchainOverview />
       </SpacedContainer>

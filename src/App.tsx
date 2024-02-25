@@ -8,7 +8,9 @@ function App() {
   return (
     <div className="App">
       <Navbar logo={logo}/>
+      <div className="App-content">
         <HomePage />
+      </div>
       <Footer />
     </div>
   );

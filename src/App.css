@@ -1,10 +1,16 @@
 .App {
   text-align: center;
-  display: block;
+  display: flex;
+  flex-direction: column; 
   background-color: rgb(64, 62, 62);
-  min-height: 100vh;
+  min-height: 100vh; 
   color: white;
 }
 
-
+.App-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 50px;
+}
 

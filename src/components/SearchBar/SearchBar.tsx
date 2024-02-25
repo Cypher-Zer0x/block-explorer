@@ -9,6 +9,7 @@ interface SearchBarProps {
 const StyledForm = styled('form')({
   marginTop: '20px',
   marginBottom: '20px',
+  display: 'flex', // Utilisez flexbox pour aligner les éléments horizontalement
 });
 
 const StyledInput = styled('input')({
@@ -16,6 +17,7 @@ const StyledInput = styled('input')({
   border: '1px solid #ccc',
   borderRadius: '5px',
   width: '300px',
+  marginRight: '10px', // Ajoutez une marge à droite pour créer un espace entre le champ et le bouton
 });
 
 const StyledButton = styled('button')({
