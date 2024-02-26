@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getBlockDetails } from '../api';
-import { Block } from '../types';
+import { Block, isUserDepositTx, isRingCTx } from '../types';
 import {
   CircularProgress,
   Container,
@@ -15,8 +15,8 @@ import {
 } from '@mui/material';
 import { Link as MuiLink } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-import LinkIcon from '@mui/icons-material/Link'; 
-import CompareArrowsIcon from '@mui/icons-material/CompareArrows'; 
+import LinkIcon from '@mui/icons-material/Link';
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { timeSince } from '../utils/Timestamp';
 
@@ -31,7 +31,6 @@ const BlockDetailsPage: React.FC = () => {
         setError(null);
         try {
           const details = await getBlockDetails(hash);
-          console.log(details);
           setBlock(details);
         } catch (error) {
           console.error(`Error fetching details for block ${hash}:`, error);
@@ -108,29 +107,38 @@ const BlockDetailsPage: React.FC = () => {
           </Table>
         </TableContainer>
         <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center', mt: 3, mb: 2 }}>
-        <CompareArrowsIcon sx={{ mr: 1, color: '#6F4CFF' }} /> Transactions
+          <CompareArrowsIcon sx={{ mr: 1, color: 'primary.main' }} /> Transactions
         </Typography>
-        {block.transactions.length > 0 ? (
+        {block && block.transactions.length > 0 ? (
           <TableContainer component={Paper} sx={{ mt: 2 }}>
-          <Table sx={{ minWidth: 650 }} aria-label="transactions table">
-            <TableBody>
-              {block.transactions.map((transaction) => (
-                <TableRow key={transaction.hash}>
-                  <TableCell component="th" scope="row">
-                    <MuiLink component={RouterLink} to={`/transaction/${transaction.hash}`} color="primary" sx={{
-                      ':hover': {
-                        color: 'secondary.main',
-                      },
-                      display: 'block', // Assure que le lien prend toute la largeur pour l'effet de survol
-                    }}>
-                      {transaction.hash}
-                    </MuiLink>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+            <Table sx={{ minWidth: 650 }} aria-label="transactions table">
+              <TableBody>
+                {block.transactions.map((transaction, index) => (
+                  <TableRow key={index}>
+                    <TableCell component="th" scope="row">
+                      Transaction Type: {isUserDepositTx(transaction) ? "User Deposit" : isRingCTx(transaction) ? "Ring Confidential" : "Unknown"}
+                    </TableCell>
+                    <TableCell align="left">
+                      <MuiLink component={RouterLink} to={`/transaction/${transaction.hash}`} color="primary" sx={{
+                        ':hover': {
+                          color: 'secondary.main',
+                        },
+                        display: 'block',
+                      }}>
+                        {transaction.hash.substring(0, 50)}...
+                      </MuiLink>
+                    </TableCell>
+                    <TableCell align="left">
+                      {isUserDepositTx(transaction) ? 
+                        `TxID: ${transaction.txId}` : 
+                        `Inputs: ${transaction.inputs.length}, Outputs: ${transaction.outputs.length}`
+                      }
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         ) : (
           <Typography>This block does not include any transactions.</Typography>
         )}

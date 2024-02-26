@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Block, Transaction, BlockchainMetrics } from '../types'; // Mise à jour des importations pour les nouveaux types
+import { Block, Transaction, BlockchainMetrics, UserDepositTx, RingCTx } from '../types'; // Mise à jour des importations pour les nouveaux types
 
 const API_ENDPOINT = 'http://176.146.201.74:3000'; // Utilisez l'URL réelle de votre API
 
@@ -82,55 +82,53 @@ export const getBlockDetails = async (hash: string): Promise<Block> => {
 };
 
 // TRANSACTION
-export const getLatestTransaction = async (): Promise<Transaction> => {
-  try {
-    const response = await axios.get(`${API_ENDPOINT}/transaction/latest`);
-    const transactionData = response.data;
-    return {
-      sender: transactionData.sender,
-      output: transactionData.output,
-      hash: transactionData.hash,
+// Utilitaire pour parser les transactions en fonction de leur type
+const parseTransactionData = (data: any): Transaction => {
+  // Si la transaction contient un champ spécifique à UserDepositTx
+  console.log(data);
+  console.log(data.UserDeposit);
+  if (data.UserDeposit) {
+    const userDepositTx: UserDepositTx = {
+      txId: data.UserDeposit.txId,
+      output: data.UserDeposit.output,
+      hash: data.UserDeposit.hash,
     };
-  } catch (error) {
-    console.error('Error fetching latest transaction:', error);
-    return {
-      sender: 'error',
-      output: 'error',
-      hash: 'error',
-    };
+    return userDepositTx;
   }
+  // Si la transaction contient un champ spécifique à RingCTx
+  else if (data.RingCTx) {
+    const ringCTx: RingCTx = {
+      inputs: data.RingCTx.inputs,
+      outputs: data.RingCTx.outputs,
+      hash: data.RingCTx.hash,
+    };
+    return ringCTx;
+  }
+  // Lever une exception si le type de transaction n'est pas reconnu
+  throw new Error('Unrecognized transaction type');
 };
 
+// Fonction pour récupérer les dix dernières transactions
 export const getTenLatestTransactions = async (): Promise<Transaction[]> => {
   try {
-    const response = await axios.get(`${API_ENDPOINT}/transaction/latests`);
-    return response.data.map((transactionData: any): Transaction => ({
-      sender: transactionData.sender,
-      output: transactionData.output,
-      hash: transactionData.hash,
-    }));
+    const response = await axios.get(`${API_ENDPOINT}/transaction/latest-ten`);
+    const transactionsData = response.data;
+    return transactionsData.map(parseTransactionData);
   } catch (error) {
     console.error('Error fetching ten latest transactions:', error);
-    return [];
+    throw error;
   }
 };
 
+// Fonction pour récupérer les détails d'une transaction spécifique
 export const getTransactionDetails = async (hash: string): Promise<Transaction> => {
   try {
     const response = await axios.get(`${API_ENDPOINT}/transaction/hash/${hash}`);
     const transactionData = response.data;
-    return {
-      sender: transactionData.sender,
-      output: transactionData.output,
-      hash: transactionData.hash,
-    };
+    return parseTransactionData(transactionData);
   } catch (error) {
     console.error(`Error fetching transaction details for hash ${hash}:`, error);
-    return {
-      sender: 'error',
-      output: 'error',
-      hash: 'error',
-    };
+    throw error;
   }
 };
 

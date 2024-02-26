@@ -9,11 +9,11 @@ export interface Block {
     transactions: Transaction[]; // Liste des transactions dans ce bloc
   }
   
-export interface Transaction {
-  sender: string;
-  output: string;
-  hash: string;
-}
+// export interface Transaction {
+//   sender: string;
+//   output: string;
+//   hash: string;
+// }
 
 export interface BlockchainMetrics {
   number_of_block: string;
@@ -33,4 +33,12 @@ export interface RingCTx {
   hash: string;
 }
 
-//export type Transaction = UserDepositTx | RingCTx;
+export type Transaction = UserDepositTx | RingCTx;
+
+export function isUserDepositTx(transaction: Transaction): transaction is UserDepositTx {
+  return (transaction as UserDepositTx).txId !== undefined;
+}
+
+export function isRingCTx(transaction: Transaction): transaction is RingCTx {
+  return (transaction as RingCTx).inputs !== undefined;
+}

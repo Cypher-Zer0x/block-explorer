@@ -1,10 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getTransactionDetails } from '../api';
-import { Transaction } from '../types';
-import { CircularProgress, Container, Typography, Paper } from '@mui/material';
-import SwapHorizIcon from '@mui/icons-material/SwapHoriz'; // Icône pour les transactions
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'; // Icône pour l'erreur
+import { Transaction, isUserDepositTx, isRingCTx } from '../types';
+import {
+  CircularProgress,
+  Container,
+  Typography,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableContainer,
+} from '@mui/material';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 const TransactionDetailsPage: React.FC = () => {
   const [transaction, setTransaction] = useState<Transaction | null>(null);
@@ -32,10 +42,10 @@ const TransactionDetailsPage: React.FC = () => {
 
   if (error) {
     return (
-      <Container>
-        <Paper elevation={1} style={{ padding: '20px', marginTop: '20px' }}>
+      <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+        <Paper elevation={3} sx={{ p: 3 }}>
           <Typography variant="h5" color="error" gutterBottom>
-            <ErrorOutlineIcon sx={{color: 'primary.main' }} /> Error
+            <ErrorOutlineIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> Error
           </Typography>
           <Typography>{error}</Typography>
         </Paper>
@@ -45,21 +55,57 @@ const TransactionDetailsPage: React.FC = () => {
 
   if (!transaction) {
     return (
-      <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <Container maxWidth="md" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <CircularProgress />
       </Container>
     );
   }
 
+  // Préparer le contenu en fonction du type de transaction
+  const transactionDetailsContent = (
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="transaction details">
+        <TableBody>
+          <TableRow>
+            <TableCell component="th" scope="row"><strong>Hash</strong></TableCell>
+            <TableCell>{transaction.hash}</TableCell>
+          </TableRow>
+          {isUserDepositTx(transaction) && (
+            <>
+              <TableRow>
+                <TableCell component="th" scope="row"><strong>Transaction ID</strong></TableCell>
+                <TableCell>{transaction.txId}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell component="th" scope="row"><strong>Output/UTXO</strong></TableCell>
+                <TableCell>{transaction.output}</TableCell>
+              </TableRow>
+            </>
+          )}
+          {isRingCTx(transaction) && (
+            <>
+              <TableRow>
+                <TableCell component="th" scope="row"><strong>Inputs</strong></TableCell>
+                <TableCell>{transaction.inputs.join(', ')}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell component="th" scope="row"><strong>Outputs/UTXOs</strong></TableCell>
+                <TableCell>{transaction.outputs.join(', ')}</TableCell>
+              </TableRow>
+            </>
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+
   return (
-    <Container>
-      <Paper elevation={1} style={{ padding: '20px', marginTop: '20px' }}>
-        <Typography variant="h4" gutterBottom>
-          <SwapHorizIcon sx={{color: 'primary.main' }} /> Transaction Details
+    <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+      <Paper elevation={3} sx={{ p: 3 }}>
+        <Typography variant="h4" gutterBottom sx={{ textAlign: 'center', mb: 3 }}>
+          <SwapHorizIcon sx={{ mr: 1, verticalAlign: 'bottom', color: 'primary.main' }} /> Transaction Details
         </Typography>
-        <Typography variant="body1">Hash: {transaction.hash}</Typography>
-        <Typography variant="body1">Sender: {transaction.sender}</Typography>
-        <Typography variant="body1">Output: {transaction.output}</Typography>
+        {transactionDetailsContent}
       </Paper>
     </Container>
   );

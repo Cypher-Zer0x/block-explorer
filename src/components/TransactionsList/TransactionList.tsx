@@ -3,7 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { ListItemText, Typography, List, ListItem, Divider, Container, ListItemAvatar, Avatar, Paper, Box, Link } from '@mui/material';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz'; // Nouvelle icône pour les transactions
 import { getTenLatestTransactions } from '../../api';
-import { Transaction } from '../../types';
+import { Transaction, isUserDepositTx, isRingCTx } from '../../types';
 
 const TransactionsList: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -11,7 +11,6 @@ const TransactionsList: React.FC = () => {
   useEffect(() => {
     const fetchTransactions = async () => {
       const latestTransactions = await getTenLatestTransactions();
-      // Supposons que vos transactions sont déjà triées par timestamp ou par un autre critère pertinent
       setTransactions(latestTransactions);
     };
 
@@ -54,10 +53,17 @@ const TransactionsList: React.FC = () => {
                       ':hover': {
                         color: 'secondary.main',
                       },
-                      display: 'block', // Ensure the link takes the full width for hover effect
+                      display: 'block',
                     }}>
-                      {transaction.hash.substring(0, 50)}...
+                      Transaction Hash: {transaction.hash.substring(0, 50)}...
                     </Link>
+                  }
+                  secondary={
+                    isUserDepositTx(transaction) ?
+                    `User Deposit Transaction: ${transaction.txId.substring(0, 50)}...` :
+                    isRingCTx(transaction) ?
+                    `Ring Confidential Transaction with ${transaction.inputs.length} inputs and ${transaction.outputs.length} outputs` :
+                    "Unknown Transaction Type"
                   }
                 />
               </ListItem>
