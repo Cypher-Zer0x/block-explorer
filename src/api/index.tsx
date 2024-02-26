@@ -1,65 +1,153 @@
 import axios from 'axios';
-import { Block, Transaction, BlockDetails, TransactionDetails } from '../types'; // Assurez-vous d'avoir ces types définis
+import { Block, Transaction, BlockchainMetrics } from '../types'; // Mise à jour des importations pour les nouveaux types
 
-const API_ENDPOINT = 'http://176.146.201.74:3000'; // Remplacez par l'URL de votre API
+const API_ENDPOINT = 'http://176.146.201.74:3000'; // Utilisez l'URL réelle de votre API
 
-export const getLatestBlocks = async (): Promise<Block[]> => {
+// BLOCK
+export const getLatestBlock = async (): Promise<Block> => {
   try {
-    const response = await axios.get(`${API_ENDPOINT}/getLastBlock`);
-    // Assurez-vous que cela renvoie un tableau de `Block[]`
-    // Vous pourriez avoir besoin de mapper ou d'ajuster les données si leur structure ne correspond pas exactement
-    // à votre type `Block`
-    console.log(response);
+    const response = await axios.get(`${API_ENDPOINT}/block/latest`);
+    const blockData = response.data;
+    return {
+      hash: blockData.hash,
+      header: {
+        block_number: blockData.header.block_number,
+        merkle_root: blockData.header.merkle_root,
+        parent_block: blockData.header.parent_block,
+        timestamp: blockData.header.timestamp,
+      },
+      transactions: blockData.transactions, // Supposons que chaque transaction correspond déjà au type Transaction
+    };
+  } catch (error) {
+    console.error('Error fetching latest block:', error);
+    return {
+      hash: 'error',
+      header: {
+        block_number: '',
+        merkle_root: '',
+        parent_block: '',
+        timestamp: '',
+      },
+      transactions: [],
+    };
+  }
+};
+
+export const getTenLatestBlocks = async (): Promise<Block[]> => {
+  try {
+    const response = await axios.get(`${API_ENDPOINT}/block/latest-ten`);
     return response.data.map((blockData: any): Block => ({
       hash: blockData.hash,
-      number: blockData.number,
-      timestamp: blockData.timestamp,
-      transactions: blockData.transactions,
-      miner: blockData.miner,
-      nonce: blockData.nonce,
+      header: {
+        block_number: blockData.header.block_number,
+        merkle_root: blockData.header.merkle_root,
+        parent_block: blockData.header.parent_block,
+        timestamp: blockData.header.timestamp,
+      },
+      transactions: blockData.transactions, // Supposons que l'API renvoie les transactions conformément au nouveau type
     }));
   } catch (error) {
-    console.error('Error fetching latest blocks:', error);
-    return []; // Renvoyez un tableau vide ou gérez l'erreur comme il convient
-  }
-};
-export const getLatestTransactions = async (): Promise<Transaction[]> => {
-  try {
-    const response = await axios.get(`${API_ENDPOINT}/transactions/latest`);
-    return response.data; // Assurez-vous que cela renvoie un Transaction[]
-  } catch (error) {
-    console.error('Error fetching latest transactions:', error);
-    return []; // Renvoyez un tableau vide ou gérez l'erreur comme il convient
+    console.error('Error fetching ten latest blocks:', error);
+    return [];
   }
 };
 
-export const getBlockDetails = async (blockHash: string): Promise<BlockDetails> => {
+export const getBlockDetails = async (hash: string): Promise<Block> => {
   try {
-    const response = await axios.get(`${API_ENDPOINT}/blocks/${blockHash}`);
-    return response.data; // Assurez-vous que cela renvoie un BlockDetails
+    const response = await axios.get(`${API_ENDPOINT}/block/hash/${hash}`);
+    const blockData = response.data;
+    return {
+      hash: blockData.hash,
+      header: {
+        block_number: blockData.header.block_number,
+        merkle_root: blockData.header.merkle_root,
+        parent_block: blockData.header.parent_block,
+        timestamp: blockData.header.timestamp,
+      },
+      transactions: blockData.transactions,
+    };
   } catch (error) {
-    console.error(`Error fetching details for block ${blockHash}:`, error);
-    throw error; // Vous pouvez relancer l'erreur ou renvoyer null et gérer cela dans votre composant
+    console.error(`Error fetching block details for hash ${hash}:`, error);
+    return {
+      hash: 'error',
+      header: {
+        block_number: '',
+        merkle_root: '',
+        parent_block: '',
+        timestamp: '',
+      },
+      transactions: [],
+    };
   }
 };
 
-export const getTransactionDetails = async (txHash: string): Promise<TransactionDetails> => {
+// TRANSACTION
+export const getLatestTransaction = async (): Promise<Transaction> => {
   try {
-    const response = await axios.get(`${API_ENDPOINT}/transactions/${txHash}`);
-    return response.data; // Assurez-vous que cela renvoie un TransactionDetails
+    const response = await axios.get(`${API_ENDPOINT}/transaction/latest`);
+    const transactionData = response.data;
+    return {
+      sender: transactionData.sender,
+      output: transactionData.output,
+      hash: transactionData.hash,
+    };
   } catch (error) {
-    console.error(`Error fetching details for transaction ${txHash}:`, error);
-    throw error; // Même gestion que pour getBlockDetails
+    console.error('Error fetching latest transaction:', error);
+    return {
+      sender: 'error',
+      output: 'error',
+      hash: 'error',
+    };
   }
 };
 
-export const getBlockchainOverview = async () => {
+export const getTenLatestTransactions = async (): Promise<Transaction[]> => {
   try {
-    // Remplacez '/path-to-overview' par le chemin réel de votre API pour obtenir les infos globales
-    const response = await axios.get(`${API_ENDPOINT}/path-to-overview`);
-    return response.data; // Suppose que l'API renvoie directement l'objet d'aperçu souhaité
+    const response = await axios.get(`${API_ENDPOINT}/transaction/latests`);
+    return response.data.map((transactionData: any): Transaction => ({
+      sender: transactionData.sender,
+      output: transactionData.output,
+      hash: transactionData.hash,
+    }));
   } catch (error) {
-    console.error('Error fetching blockchain overview:', error);
-    throw new Error('Failed to fetch blockchain overview');
+    console.error('Error fetching ten latest transactions:', error);
+    return [];
+  }
+};
+
+export const getBlockchainMetrics = async (): Promise<BlockchainMetrics> => {
+  try {
+    const response = await axios.get(`${API_ENDPOINT}/metrics`);
+    return {
+      blocks_number: response.data.blocks_number,
+      transactions_number: response.data.transactions_number,
+      utxos_number: response.data.utxos_number,
+    }
+  } catch (error) {
+    console.error('Error fetching blockchain metrics:', error);
+    return {
+      blocks_number: "0",
+      transactions_number: "0",
+      utxos_number: "0",
+    };
+  }
+};
+
+export const getTransactionDetails = async (hash: string): Promise<Transaction> => {
+  try {
+    const response = await axios.get(`${API_ENDPOINT}/transaction/hash/${hash}`);
+    const transactionData = response.data;
+    return {
+      sender: transactionData.sender,
+      output: transactionData.output,
+      hash: transactionData.hash,
+    };
+  } catch (error) {
+    console.error(`Error fetching transaction details for hash ${hash}:`, error);
+    return {
+      sender: 'error',
+      output: 'error',
+      hash: 'error',
+    };
   }
 };

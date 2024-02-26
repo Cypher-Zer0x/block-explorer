@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getLatestBlocks } from '../../api';
+import { getTenLatestBlocks } from '../../api';
 import { Block } from '../../types'; // Importez le type Block
 import { styled } from '@mui/system';
 
@@ -16,7 +16,7 @@ const BlocksList: React.FC = () => {
 
   useEffect(() => {
     const fetchBlocks = async () => {
-      const latestBlocks = await getLatestBlocks();
+      const latestBlocks = await getTenLatestBlocks();
       setBlocks(latestBlocks);
     };
 
@@ -29,7 +29,7 @@ const BlocksList: React.FC = () => {
       <ul>
         {blocks.map((block) => (
           <li key={block.hash}>
-            <Link to={`/block/${block.hash}`}>Block {block.number}: {block.hash.substring(0, 10)}...</Link>
+            <Link to={`/block/${block.hash}`}>Block {block.header.block_number}: {block.hash.substring(0, 10)}...</Link>
           </li>
         ))}
       </ul>

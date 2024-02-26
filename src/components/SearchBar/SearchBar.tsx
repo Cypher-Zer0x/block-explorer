@@ -44,7 +44,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     <StyledForm onSubmit={handleSubmit}>
       <StyledInput
         type="text"
-        placeholder="Search for blocks, transactions, or addresses"
+        placeholder="Search for blocks, transactions, or UTXO"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />

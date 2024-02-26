@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getBlockDetails } from '../api';
-import { BlockDetails } from '../types'; // Importez le type BlockDetails
+import { Block } from '../types'; // Importez le type BlockDetails
 
 const BlockDetailsPage: React.FC = () => {
-  const [block, setBlock] = useState<BlockDetails | null>(null);
+  const [block, setBlock] = useState<Block | null>(null);
   const [error, setError] = useState<string | null>(null); // Pour gérer les erreurs
   const { hash } = useParams<{ hash: string }>();
 
@@ -35,13 +35,20 @@ const BlockDetailsPage: React.FC = () => {
     <div>
       <h1>Block Details</h1>
       <p>Hash: {block.hash}</p>
-      <p>Number: {block.number}</p>
-      <p>Timestamp: {new Date(block.timestamp * 1000).toLocaleString()}</p>
-      <p>Miner: {block.miner}</p>
-      <p>Nonce: {block.nonce}</p>
-      <p>Transactions: {block.transactions.length}</p>
-      <p>Gas Used: {block.gasUsed}</p>
-      <p>Gas Limit: {block.gasLimit}</p>
+      <p>Block number: {block.header.block_number}</p>
+      <p>Merkle root: {block.header.merkle_root}</p>
+      <p>Parent block: {block.header.parent_block}</p>
+      <p>Timestamp: {block.header.timestamp}</p>
+      <h2>Transactions</h2>
+      <ul>
+        {block.transactions.map((transaction) => (
+          <li key={transaction.hash}>
+            <Link to={`/transaction/${transaction.hash}`}>Tx: {transaction.hash}</Link>
+            <p>Sender: {transaction.sender}</p>
+            <p>Output: {transaction.output}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

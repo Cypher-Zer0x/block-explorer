@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getLatestTransactions } from '../../api';
+import { getTenLatestTransactions } from '../../api';
 import { Transaction } from '../../types';
 import { styled } from '@mui/system';
 
@@ -16,7 +16,7 @@ const TransactionsList: React.FC = () => {
 
   useEffect(() => {
     const fetchTransactions = async () => {
-      const latestTransactions = await getLatestTransactions();
+      const latestTransactions = await getTenLatestTransactions();
       setTransactions(latestTransactions);
     };
 

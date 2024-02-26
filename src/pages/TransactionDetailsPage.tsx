@@ -2,10 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getTransactionDetails } from '../api';
-import { TransactionDetails } from '../types'; // Assurez-vous d'importer le type TransactionDetails
+import { Transaction } from '../types'; // Assurez-vous d'importer le type TransactionDetails
 
 const TransactionDetailsPage: React.FC = () => {
-  const [transaction, setTransaction] = useState<TransactionDetails | null>(null);
+  const [transaction, setTransaction] = useState<Transaction | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { hash } = useParams<{ hash: string }>();
 
@@ -35,15 +35,8 @@ const TransactionDetailsPage: React.FC = () => {
     <div>
       <h1>Transaction Details</h1>
       <p>Hash: {transaction.hash}</p>
-      <p>Block Number: {transaction.blockNumber}</p>
-      <p>From: {transaction.from}</p>
-      <p>To: {transaction.to}</p>
-      <p>Value: {transaction.value} ETH</p> {/* Assurez-vous de convertir la valeur si nécessaire */}
-      <p>Gas: {transaction.gas}</p>
-      <p>Gas Price: {transaction.gasPrice} Gwei</p> {/* Convertissez si nécessaire */}
-      <p>Nonce: {transaction.nonce}</p>
-      <p>Status: {transaction.status}</p>
-      {/* Ajoutez d'autres détails que vous souhaitez afficher */}
+      <p>Sender: {transaction.sender}</p>
+      <p>Output: {transaction.output}</p>
     </div>
   );
 };

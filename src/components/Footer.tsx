@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
       sx={{
         backgroundColor: 'rgba(18, 18, 18, 0.2)',
         textAlign: 'center',
-        padding: '20px',
+        padding: '20px 0px 20px 0px',
         width: '100%',
       }}
     >
