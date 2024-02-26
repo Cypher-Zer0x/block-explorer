@@ -24,6 +24,7 @@ const BlocksList: React.FC = () => {
     fetchBlocks();
   }, []);
 
+
   return (
     <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
       <Paper elevation={3} sx={{

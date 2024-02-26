@@ -22,7 +22,7 @@ const StyledInput = styled('input')({
 
 const StyledButton = styled('button')({
   padding: '10px 20px',
-  backgroundColor: '#007bff',
+  backgroundColor: '#6F4CFF',
   color: '#fff',
   border: 'none',
   borderRadius: '5px',

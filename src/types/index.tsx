@@ -21,4 +21,16 @@ export interface BlockchainMetrics {
   number_of_utxo: string;
 }
 
-  
+export interface UserDepositTx {
+  txId: string;
+  output: string;
+  hash: string;
+}
+
+export interface RingCTx {
+  inputs: string[];
+  outputs: string[];
+  hash: string;
+}
+
+//export type Transaction = UserDepositTx | RingCTx;

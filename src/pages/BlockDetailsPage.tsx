@@ -31,6 +31,7 @@ const BlockDetailsPage: React.FC = () => {
         setError(null);
         try {
           const details = await getBlockDetails(hash);
+          console.log(details);
           setBlock(details);
         } catch (error) {
           console.error(`Error fetching details for block ${hash}:`, error);
@@ -69,7 +70,7 @@ const BlockDetailsPage: React.FC = () => {
     <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
       <Paper elevation={3} sx={{ p: 3 }}>
         <Typography variant="h4" gutterBottom sx={{ textAlign: 'center', mb: 3 }}>
-          <LinkIcon sx={{ mr: 1, verticalAlign: 'center' }} /> Block Details
+          <LinkIcon sx={{ mr: 1, verticalAlign: 'center', color:"primary.main" }} /> Block Details
         </Typography>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -107,7 +108,7 @@ const BlockDetailsPage: React.FC = () => {
           </Table>
         </TableContainer>
         <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center', mt: 3, mb: 2 }}>
-          <CompareArrowsIcon sx={{ mr: 1 }} /> Transactions
+        <CompareArrowsIcon sx={{ mr: 1, color: '#6F4CFF' }} /> Transactions
         </Typography>
         {block.transactions.length > 0 ? (
           <TableContainer component={Paper} sx={{ mt: 2 }}>

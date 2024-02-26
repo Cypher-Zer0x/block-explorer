@@ -35,7 +35,7 @@ const TransactionDetailsPage: React.FC = () => {
       <Container>
         <Paper elevation={1} style={{ padding: '20px', marginTop: '20px' }}>
           <Typography variant="h5" color="error" gutterBottom>
-            <ErrorOutlineIcon /> Error
+            <ErrorOutlineIcon sx={{color: 'primary.main' }} /> Error
           </Typography>
           <Typography>{error}</Typography>
         </Paper>
@@ -55,7 +55,7 @@ const TransactionDetailsPage: React.FC = () => {
     <Container>
       <Paper elevation={1} style={{ padding: '20px', marginTop: '20px' }}>
         <Typography variant="h4" gutterBottom>
-          <SwapHorizIcon /> Transaction Details
+          <SwapHorizIcon sx={{color: 'primary.main' }} /> Transaction Details
         </Typography>
         <Typography variant="body1">Hash: {transaction.hash}</Typography>
         <Typography variant="body1">Sender: {transaction.sender}</Typography>

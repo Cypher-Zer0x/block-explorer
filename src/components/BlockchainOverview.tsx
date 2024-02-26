@@ -47,8 +47,8 @@ const BlockchainOverview: React.FC = () => {
   return (
     <Paper elevation={3} sx={{ m: 4, borderRadius: '10px', bgcolor: 'grey.100', p: 3, boxShadow: 3 }}>
       <Typography variant="h4" align="center" gutterBottom>
-        <AssessmentIcon sx={{ verticalAlign: 'middle', fontSize: '2rem', mr: 1 }} />
-        Zer0x Metrics
+        <AssessmentIcon sx={{ verticalAlign: 'middle', fontSize: '2.5rem', mr: 1, color: 'primary.main' }} /> 
+        <b>Zer0x Metrics</b>
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
@@ -79,10 +79,10 @@ const BlockchainOverview: React.FC = () => {
           <ResponsiveContainer width="100%" height="100%">
               <LineChart data={transactionData} margin={{ top: 5, right: 20, bottom: 5, left: -20 }}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="hour" axisLine={false} tickLine={false} tick={{ fill: '#8884d8' }} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#8884d8' }} />
+                <XAxis dataKey="hour" axisLine={false} tickLine={false} tick={{ fill: '#6F4CFF' }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6F4CFF' }} />
                 <Tooltip wrapperStyle={{ borderColor: 'white', boxShadow: '2px 2px 3px rgba(0,0,0,0.3)' }} />
-                <Line type="monotone" dataKey="transactions" stroke="#8884d8" activeDot={{ r: 8 }} />
+                <Line type="monotone" dataKey="transactions" stroke="#6F4CFF" activeDot={{ r: 8 }} />
               </LineChart>
             </ResponsiveContainer>
           </Paper>

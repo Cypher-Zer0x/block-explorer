@@ -12,8 +12,11 @@ const NotFound = () => {
       <Typography variant="subtitle1" gutterBottom>
         Sorry, this page does not exist.
       </Typography>
-      <Button variant="contained" color="primary" onClick={() => navigate('/')}>
-        Go Back to Home Page
+      <Button
+        variant="contained"
+        sx={{ backgroundColor: '#6F4CFF', '&:hover': { backgroundColor: '#5e43cc' } }}
+        onClick={() => navigate('/')}>        
+        Back to Home Page
       </Button>
     </Container>
   );

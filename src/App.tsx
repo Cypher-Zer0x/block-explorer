@@ -7,10 +7,13 @@ import logo from './assets/cypher_zero_logo.png';
 import TransactionDetailsPage from './pages/TransactionDetailsPage'; // Assurez-vous que ce composant existe
 import BlockDetailsPage from './pages/BlockDetailsPage';
 import NotFound from './pages/NotFound';
+import { ThemeProvider } from '@mui/material/styles';
+import { theme } from './utils/Theme';
 
 function App() {
   return (
     <Router>
+      <ThemeProvider theme={theme}>
       <div className="App">
         <Navbar logo={logo}/>
         <div className="App-content">
@@ -23,6 +26,7 @@ function App() {
         </div>
         <Footer/>
       </div>
+      </ThemeProvider>
     </Router>
   );
 }
