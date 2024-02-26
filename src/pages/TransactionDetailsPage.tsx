@@ -1,8 +1,10 @@
-// src/pages/TransactionDetailsPage.tsx
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getTransactionDetails } from '../api';
-import { Transaction } from '../types'; // Assurez-vous d'importer le type TransactionDetails
+import { Transaction } from '../types';
+import { CircularProgress, Container, Typography, Paper } from '@mui/material';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz'; // Icône pour les transactions
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'; // Icône pour l'erreur
 
 const TransactionDetailsPage: React.FC = () => {
   const [transaction, setTransaction] = useState<Transaction | null>(null);
@@ -28,16 +30,38 @@ const TransactionDetailsPage: React.FC = () => {
     }
   }, [hash]);
 
-  if (error) return <div>Error: {error}</div>;
-  if (!transaction) return <div>Loading...</div>;
+  if (error) {
+    return (
+      <Container>
+        <Paper elevation={1} style={{ padding: '20px', marginTop: '20px' }}>
+          <Typography variant="h5" color="error" gutterBottom>
+            <ErrorOutlineIcon /> Error
+          </Typography>
+          <Typography>{error}</Typography>
+        </Paper>
+      </Container>
+    );
+  }
+
+  if (!transaction) {
+    return (
+      <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </Container>
+    );
+  }
 
   return (
-    <div>
-      <h1>Transaction Details</h1>
-      <p>Hash: {transaction.hash}</p>
-      <p>Sender: {transaction.sender}</p>
-      <p>Output: {transaction.output}</p>
-    </div>
+    <Container>
+      <Paper elevation={1} style={{ padding: '20px', marginTop: '20px' }}>
+        <Typography variant="h4" gutterBottom>
+          <SwapHorizIcon /> Transaction Details
+        </Typography>
+        <Typography variant="body1">Hash: {transaction.hash}</Typography>
+        <Typography variant="body1">Sender: {transaction.sender}</Typography>
+        <Typography variant="body1">Output: {transaction.output}</Typography>
+      </Paper>
+    </Container>
   );
 };
 
