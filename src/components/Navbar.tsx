@@ -4,9 +4,10 @@ import Toolbar from '@mui/material/Toolbar';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import SearchBar from '../components/SearchBar/SearchBar';
+import { Link } from 'react-router-dom';
 
 interface NavbarProps {
-  logo: string; // URL ou chemin vers le logo
+  logo: string; 
 }
 
 const Navbar: React.FC<NavbarProps> = ({ logo }) => {
@@ -27,7 +28,6 @@ const Navbar: React.FC<NavbarProps> = ({ logo }) => {
       marginTop: '2vh',
       marginBottom: '2vh',
       borderRadius: '50%', 
-      
     };
   } else {
     // Styles pour les écrans plus grands
@@ -44,12 +44,14 @@ const Navbar: React.FC<NavbarProps> = ({ logo }) => {
 
   return (
     <AppBar position="static" sx={{ backgroundColor: 'rgba(18, 18, 18, 0.2)' }}> 
-      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}> {/* Utiliser flexbox pour aligner les éléments */}
-        <img 
-          src={logo} 
-          alt="Cypher Zer0x" 
-          style={logoStyles}
-        />
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Link to="/">
+          <img 
+            src={logo} 
+            alt="Cypher Zer0x" 
+            style={logoStyles}
+          />
+        </Link>
         <SearchBar onSearch={handleSearch} />
       </Toolbar>
     </AppBar>

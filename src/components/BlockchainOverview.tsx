@@ -4,7 +4,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { getBlockchainMetrics } from '../api';
 import { BlockchainMetrics } from '../types';
 import AssessmentIcon from '@mui/icons-material/Assessment';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import AccountBalanceIcon from '@mui/icons-material/Link';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 
@@ -59,17 +59,17 @@ const BlockchainOverview: React.FC = () => {
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <AccountBalanceIcon sx={{ mr: 1, color: 'primary.main' }} />
-                <Typography variant="body1">Total Blocks: {overview.blocks_number}</Typography>
+                <Typography variant="body1">Total Blocks: {overview.number_of_block}</Typography>
               </Box>
               <Divider />
               <Box sx={{ display: 'flex', alignItems: 'center', my: 2 }}>
                 <SwapVertIcon sx={{ mr: 1, color: 'primary.main' }} />
-                <Typography variant="body1">Total Transactions: {overview.transactions_number}</Typography>
+                <Typography variant="body1">Total Transactions: {overview.number_of_tx}</Typography>
               </Box>
               <Divider />
               <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
                 <AccountTreeIcon sx={{ mr: 1, color: 'primary.main' }} />
-                <Typography variant="body1">Total UTXOs: {overview.utxos_number}</Typography>
+                <Typography variant="body1">Total UTXOs: {overview.number_of_utxo}</Typography>
               </Box>
             </Box>
           </Paper>

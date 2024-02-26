@@ -16,9 +16,9 @@ export interface Transaction {
 }
 
 export interface BlockchainMetrics {
-  blocks_number: string;
-  transactions_number: string;
-  utxos_number: string;
+  number_of_block: string;
+  number_of_tx: string;
+  number_of_utxo: string;
 }
 
   

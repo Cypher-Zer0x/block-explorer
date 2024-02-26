@@ -115,24 +115,6 @@ export const getTenLatestTransactions = async (): Promise<Transaction[]> => {
   }
 };
 
-export const getBlockchainMetrics = async (): Promise<BlockchainMetrics> => {
-  try {
-    const response = await axios.get(`${API_ENDPOINT}/metrics`);
-    return {
-      blocks_number: response.data.blocks_number,
-      transactions_number: response.data.transactions_number,
-      utxos_number: response.data.utxos_number,
-    }
-  } catch (error) {
-    console.error('Error fetching blockchain metrics:', error);
-    return {
-      blocks_number: "0",
-      transactions_number: "0",
-      utxos_number: "0",
-    };
-  }
-};
-
 export const getTransactionDetails = async (hash: string): Promise<Transaction> => {
   try {
     const response = await axios.get(`${API_ENDPOINT}/transaction/hash/${hash}`);
@@ -148,6 +130,25 @@ export const getTransactionDetails = async (hash: string): Promise<Transaction> 
       sender: 'error',
       output: 'error',
       hash: 'error',
+    };
+  }
+};
+
+// METRICS
+export const getBlockchainMetrics = async (): Promise<BlockchainMetrics> => {
+  try {
+    const response = await axios.get(`${API_ENDPOINT}/metrics`);
+    return {
+      number_of_block: response.data.number_of_block,
+      number_of_tx: response.data.number_of_tx,
+      number_of_utxo: response.data.number_of_utxo,
+    }
+  } catch (error) {
+    console.error('Error fetching blockchain metrics:', error);
+    return {
+      number_of_block: "0",
+      number_of_tx: "0",
+      number_of_utxo: "0",
     };
   }
 };
