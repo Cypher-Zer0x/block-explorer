@@ -18,19 +18,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import LinkIcon from '@mui/icons-material/Link'; 
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows'; 
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-
-const timeSince = (timestamp: string) => {
-  const timeElapsedInSeconds = (Date.now() - Number(timestamp)) / 1000; 
-    if (timeElapsedInSeconds >= 3600) {
-      const hours = Math.floor(timeElapsedInSeconds / 3600);
-      return `${hours} ${hours === 1 ? 'hour' : 'hours'} ago`;
-    } else if (timeElapsedInSeconds >= 60) {
-      const minutes = Math.floor(timeElapsedInSeconds / 60);
-      return `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`;
-    } else {
-      return `${Math.floor(timeElapsedInSeconds)} seconds ago`;
-    }
-  };
+import { timeSince } from '../utils/Timestamp';
 
 const BlockDetailsPage: React.FC = () => {
   const [block, setBlock] = useState<Block | null>(null);
@@ -110,10 +98,6 @@ const BlockDetailsPage: React.FC = () => {
                     {block.header.parent_block}
                   </MuiLink>
                 </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell component="th" scope="row"><strong>Timestamp</strong></TableCell>
-                <TableCell align="left">{block.header.timestamp}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell component="th" scope="row"><strong>Timestamp</strong></TableCell>

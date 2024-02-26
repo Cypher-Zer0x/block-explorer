@@ -5,6 +5,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LinkIcon from '@mui/icons-material/Link'; // Import the link icon
 import { getTenLatestBlocks } from '../../api';
 import { Block } from '../../types';
+import { timeSince } from '../../utils/Timestamp';
 
 const BlocksList: React.FC = () => {
   const [blocks, setBlocks] = useState<Block[]>([]);
@@ -22,19 +23,6 @@ const BlocksList: React.FC = () => {
 
     fetchBlocks();
   }, []);
-
-  const timeSince = (timestamp: string) => {
-    const timeElapsedInSeconds = (Date.now() - Number(timestamp)) / 1000; 
-    if (timeElapsedInSeconds >= 3600) {
-        const hours = Math.floor(timeElapsedInSeconds / 3600);
-        return `${hours} ${hours === 1 ? 'hour' : 'hours'} ago`;
-    } else if (timeElapsedInSeconds >= 60) {
-        const minutes = Math.floor(timeElapsedInSeconds / 60);
-        return `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`;
-    } else {
-        return `${Math.floor(timeElapsedInSeconds)} seconds ago`;
-    }
-  };
 
   return (
     <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
