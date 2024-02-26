@@ -7,6 +7,7 @@ import logo from './assets/cypher_zero_logo.png';
 import TransactionDetailsPage from './pages/TransactionDetailsPage'; // Assurez-vous que ce composant existe
 import BlockDetailsPage from './pages/BlockDetailsPage';
 import NotFound from './pages/NotFound';
+import UtxoDetailsPage from './pages/UtxoDetailsPage';
 import { ThemeProvider } from '@mui/material/styles';
 import { theme } from './utils/Theme';
 
@@ -21,6 +22,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/transaction/:hash" element={<TransactionDetailsPage />} />
             <Route path="/block/:hash" element={<BlockDetailsPage />} />
+            <Route path="/utxoDetails/:utxoId" element={<UtxoDetailsPage />} />
             <Route path="*" element={<NotFound/>}/>
           </Routes>
         </div>

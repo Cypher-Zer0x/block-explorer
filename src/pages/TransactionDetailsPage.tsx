@@ -15,6 +15,8 @@ import {
 } from '@mui/material';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { Link as MuiLink } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 
 const TransactionDetailsPage: React.FC = () => {
   const [transaction, setTransaction] = useState<Transaction | null>(null);
@@ -78,7 +80,11 @@ const TransactionDetailsPage: React.FC = () => {
               </TableRow>
               <TableRow>
                 <TableCell component="th" scope="row"><strong>Output/UTXO</strong></TableCell>
-                <TableCell>{transaction.output}</TableCell>
+                <TableCell>
+                  <MuiLink component={RouterLink} to={`/utxoDetails/${transaction.output}`} sx={{ marginRight: 2 }}>
+                    {transaction.output}
+                  </MuiLink>
+                </TableCell>
               </TableRow>
             </>
           )}
@@ -90,7 +96,16 @@ const TransactionDetailsPage: React.FC = () => {
               </TableRow>
               <TableRow>
                 <TableCell component="th" scope="row"><strong>Outputs/UTXOs</strong></TableCell>
-                <TableCell>{transaction.outputs.join(', ')}</TableCell>
+                <TableCell>
+                  {transaction.outputs.map((output, index) => (
+                    <React.Fragment key={index}>
+                      <MuiLink component={RouterLink} to={`/utxoDetails/${output}`} sx={{ marginRight: 2 }}>
+                        {output}
+                      </MuiLink>
+                      {index < transaction.outputs.length - 1 ? ', ' : ''}
+                    </React.Fragment>
+                  ))}
+                </TableCell>
               </TableRow>
             </>
           )}
