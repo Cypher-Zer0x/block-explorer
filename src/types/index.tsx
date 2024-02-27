@@ -31,6 +31,19 @@ export interface RingCTx {
   hash: string;
 }
 
+export enum TxType {
+  UserDeposit = "UserDeposit",
+  RingCT = "RingCT",
+  Exit = "UserExit",
+}
+
+export interface BlockFromApi extends Omit<Block, "transactions"> {
+  transactions: TxFromApi[];
+}
+
+export type TxFromApi = {
+  [txType in TxType]: Transaction;
+};
 export type Transaction = UserDepositTx | RingCTx;
 
 export function isUserDepositTx(transaction: Transaction): transaction is UserDepositTx {

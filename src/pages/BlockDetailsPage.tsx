@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getBlockDetails } from '../api';
-import { Block, isUserDepositTx, isRingCTx } from '../types';
+import { BlockFromApi } from '../types';
 import {
   CircularProgress,
   Container,
@@ -21,7 +21,7 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { timeSince } from '../utils/Timestamp';
 
 const BlockDetailsPage: React.FC = () => {
-  const [block, setBlock] = useState<Block | null>(null);
+  const [block, setBlock] = useState<BlockFromApi | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { hash } = useParams<{ hash: string }>();
 
@@ -32,10 +32,6 @@ const BlockDetailsPage: React.FC = () => {
         try {
           const details = await getBlockDetails(hash);
           setBlock(details);
-          console.log('Block details:', details);
-          console.log('Block transactions:', details?.transactions);
-          // console.log(details?.transactions[0]?.UserDeposit);
-          // console.log(details?.transactions[0]?.RingCTx);
         } catch (error) {
           console.error(`Error fetching details for block ${hash}:`, error);
           setError('Failed to fetch block details');
@@ -116,32 +112,58 @@ const BlockDetailsPage: React.FC = () => {
         {block && block.transactions.length > 0 ? (
           <TableContainer component={Paper} sx={{ mt: 2 }}>
             <Table sx={{ minWidth: 650 }} aria-label="transactions table">
-              <TableBody>
-                {block.transactions.map((transaction, index) => (
-                  <TableRow key={index}>
-                    <TableCell component="th" scope="row">
-                      Transaction Type: {isUserDepositTx(transaction) ? "User Deposit" : isRingCTx(transaction) ? "Ring Confidential" : "Unknown"}
-                    </TableCell>
-                    <TableCell align="left">
-                      <MuiLink component={RouterLink} to={`/transaction/${transaction.hash}`} color="primary" sx={{
-                        ':hover': {
-                          color: 'secondary.main',
-                        },
-                        display: 'block',
-                      }}>
-                        {transaction.hash?.substring(0, 50) ?? 'Hash non disponible'}...
-                      </MuiLink>
-                    </TableCell>
-                    <TableCell align="left">
-                      {isUserDepositTx(transaction) ? 
-                        `TxID: ${transaction.txId}` : 
-                        // Use optional chaining and coalesce to 'N/A' if undefined
-                        `Inputs: ${transaction.inputs?.length ?? 'N/A'}, Outputs: ${transaction.outputs?.length ?? 'N/A'}`
-                      }
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
+            <TableBody>
+  {block.transactions.map((transaction, index) => {
+    // Déterminer le type de la transaction
+    const transactionType = transaction.UserDeposit ? "UserDeposit" : transaction.RingCT ? "RingCT" : "Unknown";
+    let transactionDetails : any;
+    let hash: string | null = null;
+
+    // Sélectionner les détails de la transaction et le hash en fonction du type
+    switch (transactionType) {
+      case "UserDeposit":
+        transactionDetails = transaction.UserDeposit;
+        hash = transactionDetails.hash;
+        break;
+      case "RingCT":
+        transactionDetails = transaction.RingCT;
+        hash = transactionDetails.hash;
+        break;
+      default:
+        // Gérer le cas inconnu ou ajouter d'autres types ici si nécessaire
+        break;
+    }
+
+    return (
+      <TableRow key={index}>
+        <TableCell component="th" scope="row">
+          Transaction Type: {transactionType === "UserDeposit" ? "User Deposit" : transactionType === "RingCT" ? "Ring Confidential" : "Unknown"}
+          </TableCell>
+          <TableCell align="left">
+            {hash ? (
+              <MuiLink component={RouterLink} to={`/transaction/${hash}`} color="primary" sx={{
+                ':hover': {
+                  color: 'secondary.main',
+                },
+                display: 'block',
+              }}>
+                {hash.substring(0, 50)}...
+              </MuiLink>
+            ) : 'Hash non disponible'}
+          </TableCell>
+          <TableCell align="left">
+            {transactionType === "UserDeposit" ? 
+              `TxID: ${transactionDetails.txId}` : 
+              transactionType === "RingCT" ?
+              `Inputs: ${transactionDetails.inputs.length}, Outputs: ${transactionDetails.outputs.length}` : 
+              'N/A'
+            }
+          </TableCell>
+          </TableRow>
+            );
+          })}
+        </TableBody>
+
             </Table>
           </TableContainer>
         ) : (

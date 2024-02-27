@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Block, Transaction, BlockchainMetrics, UserDepositTx, RingCTx, CoinbaseUTXO, ExitUTXO, PaymentUTXO, UTXO } from '../types'; // Mise à jour des importations pour les nouveaux types
+import { Block, Transaction, BlockchainMetrics, UserDepositTx, RingCTx, CoinbaseUTXO, ExitUTXO, PaymentUTXO, UTXO, TxFromApi, BlockFromApi } from '../types'; // Mise à jour des importations pour les nouveaux types
 
 const API_ENDPOINT = 'http://176.146.201.74:3000'; // Utilisez l'URL réelle de votre API
 
@@ -52,10 +52,11 @@ export const getTenLatestBlocks = async (): Promise<Block[]> => {
   }
 };
 
-export const getBlockDetails = async (hash: string): Promise<Block |null> => {
+export const getBlockDetails = async (hash: string): Promise<BlockFromApi |null> => {
   try {
     const response = await axios.get(`${API_ENDPOINT}/block/hash/${hash}`);
-    const blockData = response.data;
+    const blockData : BlockFromApi = response.data;
+    console.log("rawout api:\n", JSON.stringify(response.data));
     return {
       hash: blockData.hash,
       header: {
@@ -65,7 +66,7 @@ export const getBlockDetails = async (hash: string): Promise<Block |null> => {
         timestamp: blockData.header.timestamp,
       },
       transactions: blockData.transactions,
-    };
+    } satisfies BlockFromApi;
   } catch (error) {
     console.error(`Error fetching block details for hash ${hash}:`, error);
     return null;

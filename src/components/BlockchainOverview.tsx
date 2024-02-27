@@ -25,8 +25,28 @@ const BlockchainOverview: React.FC = () => {
         const dataExample: TransactionData[] = [
           { hour: '00:00', transactions: 120 },
           { hour: '01:00', transactions: 150 },
-          // ... Autres données de transactions par heure
-        ];
+          { hour: '02:00', transactions: 200 },
+          { hour: '03:00', transactions: 180 },
+          { hour: '04:00', transactions: 250 },
+          { hour: '05:00', transactions: 300 },
+          { hour: '06:00', transactions: 280 },
+        { hour: '07:00', transactions: 200 },
+        { hour: '08:00', transactions: 180 },
+        { hour: '09:00', transactions: 250 },
+        { hour: '10:00', transactions: 300 },
+        { hour: '11:00', transactions: 280 },
+        { hour: '12:00', transactions: 200 },
+        { hour: '13:00', transactions: 180 },
+        { hour: '14:00', transactions: 250 },
+        { hour: '15:00', transactions: 300 },
+        { hour: '16:00', transactions: 280 },
+        { hour: '17:00', transactions: 200 },
+        { hour: '18:00', transactions: 180 },
+        { hour: '19:00', transactions: 250 },
+        { hour: '20:00', transactions: 300 },
+        { hour: '21:00', transactions: 280 },
+        { hour: '22:00', transactions: 200 },
+        { hour: '23:00', transactions: 180 }];
         setTransactionData(dataExample);
       } catch (error) {
         console.error("Failed to fetch blockchain metrics: ", error);
