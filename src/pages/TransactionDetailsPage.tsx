@@ -12,6 +12,7 @@ import {
   TableCell,
   TableRow,
   TableContainer,
+  Chip,
 } from '@mui/material';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
@@ -62,6 +63,7 @@ const TransactionDetailsPage: React.FC = () => {
       </Container>
     );
   }
+  const TxoTypeLabel = isRingCTx(transaction) ? "Ring Tx" : isUserDepositTx(transaction) ? "Deposit Tx" : "Unknown Type";
 
   // Préparer le contenu en fonction du type de transaction
   const transactionDetailsContent = (
@@ -69,6 +71,11 @@ const TransactionDetailsPage: React.FC = () => {
       <Table sx={{ minWidth: 650 }} aria-label="transaction details">
         <TableBody>
           <TableRow>
+                  <TableCell colSpan={2} align="center">
+                    <Chip label={TxoTypeLabel} color="primary" />
+                  </TableCell>
+                </TableRow>
+            <TableRow>
             <TableCell component="th" scope="row"><strong>Hash</strong></TableCell>
             <TableCell>{transaction.hash}</TableCell>
           </TableRow>
@@ -79,10 +86,9 @@ const TransactionDetailsPage: React.FC = () => {
                 <TableCell>{transaction.txId}</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell component="th" scope="row"><strong>Output/UTXO</strong></TableCell>
+                <TableCell component="th" scope="row"><strong>Output/UTXOs</strong></TableCell>
                 <TableCell>
                   <MuiLink component={RouterLink} to={`/utxoDetails/${transaction.output}`} sx={{ marginRight: 2 }}>
-                    {transaction.output}
                   </MuiLink>
                 </TableCell>
               </TableRow>

@@ -32,6 +32,10 @@ const BlockDetailsPage: React.FC = () => {
         try {
           const details = await getBlockDetails(hash);
           setBlock(details);
+          console.log('Block details:', details);
+          console.log('Block transactions:', details?.transactions);
+          // console.log(details?.transactions[0]?.UserDeposit);
+          // console.log(details?.transactions[0]?.RingCTx);
         } catch (error) {
           console.error(`Error fetching details for block ${hash}:`, error);
           setError('Failed to fetch block details');
@@ -125,13 +129,14 @@ const BlockDetailsPage: React.FC = () => {
                         },
                         display: 'block',
                       }}>
-                        {transaction.hash.substring(0, 50)}...
+                        {transaction.hash?.substring(0, 50) ?? 'Hash non disponible'}...
                       </MuiLink>
                     </TableCell>
                     <TableCell align="left">
                       {isUserDepositTx(transaction) ? 
                         `TxID: ${transaction.txId}` : 
-                        `Inputs: ${transaction.inputs.length}, Outputs: ${transaction.outputs.length}`
+                        // Use optional chaining and coalesce to 'N/A' if undefined
+                        `Inputs: ${transaction.inputs?.length ?? 'N/A'}, Outputs: ${transaction.outputs?.length ?? 'N/A'}`
                       }
                     </TableCell>
                   </TableRow>
