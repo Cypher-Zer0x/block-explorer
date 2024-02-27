@@ -13,9 +13,6 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ logo }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const handleSearch = (searchTerm: string) => {
-    console.log('Search term:', searchTerm);
-  };
 
   let logoStyles;
   if (isMobile) {
@@ -52,7 +49,7 @@ const Navbar: React.FC<NavbarProps> = ({ logo }) => {
             style={logoStyles}
           />
         </Link>
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar/>
       </Toolbar>
     </AppBar>
   );

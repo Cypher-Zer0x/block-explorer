@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/system';
+import { useNavigate } from 'react-router-dom';
 import { getUTXODetails, getBlockDetails, getTransactionDetails } from '../../api';
-import { useNavigate } from 'react-router-dom'; // Importez useNavigate
+import Box from '@mui/material/Box';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
-interface SearchBarProps {
-  onSearch: (searchTerm: string) => void;
-}
-
-// Utilisez styled de MUI avec Emotion pour appliquer les styles CSS
 const StyledForm = styled('form')({
   marginTop: '20px',
   marginBottom: '20px',
-  display: 'flex', // Utilisez flexbox pour aligner les éléments horizontalement
+  display: 'flex',
+  alignItems: 'center', // Pour aligner l'input et le bouton sur la même ligne
+  flexDirection: 'row', // S'assure que le layout est horizontal
 });
 
 const StyledInput = styled('input')({
@@ -19,7 +18,7 @@ const StyledInput = styled('input')({
   border: '1px solid #ccc',
   borderRadius: '5px',
   width: '300px',
-  marginRight: '10px', // Ajoutez une marge à droite pour créer un espace entre le champ et le bouton
+  marginRight: '10px',
 });
 
 const StyledButton = styled('button')({
@@ -34,15 +33,28 @@ const StyledButton = styled('button')({
   },
 });
 
-const SearchBar: React.FC<SearchBarProps> = () => {
+const ErrorMessage = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: theme.spacing(1),
+  margin: theme.spacing(1, 0),
+  backgroundColor: 'rgba(255, 0, 0, 0.1)', // Fond légèrement rouge pour l'accentuation
+  border: '1px solid red', // Bordure rouge
+  borderRadius: theme.shape.borderRadius, // Utilise le borderRadius par défaut de MUI
+}));
+
+
+const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const navigate = useNavigate(); // Utilisez useNavigate pour la navigation
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e:any) => {
     e.preventDefault();
-    let path = ''; // Initialiser le chemin de redirection
+    setErrorMessage(''); // Réinitialise le message d'erreur à chaque soumission
+    let path = '';
 
-    // Appels asynchrones pour vérifier le type de ressource
     if (await getBlockDetails(searchTerm)) {
       path = `/block/${searchTerm}`;
     } else if (await getTransactionDetails(searchTerm)) {
@@ -52,23 +64,32 @@ const SearchBar: React.FC<SearchBarProps> = () => {
     }
 
     if (path) {
-      navigate(path); // Naviguer vers le chemin si trouvé
+      navigate(path);
     } else {
-      // Gérer le cas où aucune ressource n'est trouvée
-      console.log('No resource found for this hash'); // Ou afficher une notification à l'utilisateur
+      // Met à jour le message d'erreur si aucune correspondance n'est trouvée
+      setErrorMessage('No resource found for this hash');
     }
   };
 
   return (
-    <StyledForm onSubmit={handleSubmit}>
-      <StyledInput
-        type="text"
-        placeholder="Search for blocks, transactions, or UTXO"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      <StyledButton type="submit">Search</StyledButton>
-    </StyledForm>
+    <div>
+      <StyledForm onSubmit={handleSubmit}>
+        <StyledInput
+          type="text"
+          placeholder="Search for blocks, transactions, or UTXO"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <StyledButton type="submit">Search</StyledButton>
+      </StyledForm>
+      {errorMessage && (
+        <ErrorMessage>
+          <WarningAmberIcon sx={{ marginRight: 1, color: 'red' }} />
+          {errorMessage}
+        </ErrorMessage>
+      )}
+    </div>
+    
   );
 };
 
