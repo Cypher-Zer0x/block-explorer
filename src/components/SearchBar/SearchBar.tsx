@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/system';
+import { getUTXODetails, getBlockDetails, getTransactionDetails } from '../../api';
+import { useNavigate } from 'react-router-dom'; // Importez useNavigate
 
 interface SearchBarProps {
   onSearch: (searchTerm: string) => void;
@@ -32,12 +34,29 @@ const StyledButton = styled('button')({
   },
 });
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
+const SearchBar: React.FC<SearchBarProps> = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate(); // Utilisez useNavigate pour la navigation
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSearch(searchTerm);
+    let path = ''; // Initialiser le chemin de redirection
+
+    // Appels asynchrones pour vérifier le type de ressource
+    if (await getBlockDetails(searchTerm)) {
+      path = `/block/${searchTerm}`;
+    } else if (await getTransactionDetails(searchTerm)) {
+      path = `/transaction/${searchTerm}`;
+    } else if (await getUTXODetails(searchTerm)) {
+      path = `/utxoDetails/${searchTerm}`;
+    }
+
+    if (path) {
+      navigate(path); // Naviguer vers le chemin si trouvé
+    } else {
+      // Gérer le cas où aucune ressource n'est trouvée
+      console.log('No resource found for this hash'); // Ou afficher une notification à l'utilisateur
+    }
   };
 
   return (

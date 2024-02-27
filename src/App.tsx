@@ -22,7 +22,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/transaction/:hash" element={<TransactionDetailsPage />} />
             <Route path="/block/:hash" element={<BlockDetailsPage />} />
-            <Route path="/utxoDetails/:utxoId" element={<UtxoDetailsPage />} />
+            <Route path="/utxoDetails/:hash" element={<UtxoDetailsPage />} />
             <Route path="*" element={<NotFound/>}/>
           </Routes>
         </div>

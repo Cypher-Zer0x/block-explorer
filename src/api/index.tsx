@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Block, Transaction, BlockchainMetrics, UserDepositTx, RingCTx } from '../types'; // Mise à jour des importations pour les nouveaux types
+import { Block, Transaction, BlockchainMetrics, UserDepositTx, RingCTx, CoinbaseUTXO, ExitUTXO, PaymentUTXO, UTXO } from '../types'; // Mise à jour des importations pour les nouveaux types
 
 const API_ENDPOINT = 'http://176.146.201.74:3000'; // Utilisez l'URL réelle de votre API
 
@@ -52,7 +52,7 @@ export const getTenLatestBlocks = async (): Promise<Block[]> => {
   }
 };
 
-export const getBlockDetails = async (hash: string): Promise<Block> => {
+export const getBlockDetails = async (hash: string): Promise<Block |null> => {
   try {
     const response = await axios.get(`${API_ENDPOINT}/block/hash/${hash}`);
     const blockData = response.data;
@@ -68,16 +68,7 @@ export const getBlockDetails = async (hash: string): Promise<Block> => {
     };
   } catch (error) {
     console.error(`Error fetching block details for hash ${hash}:`, error);
-    return {
-      hash: 'error',
-      header: {
-        block_number: '',
-        merkle_root: '',
-        parent_block: '',
-        timestamp: '',
-      },
-      transactions: [],
-    };
+    return null;
   }
 };
 
@@ -116,19 +107,19 @@ export const getTenLatestTransactions = async (): Promise<Transaction[]> => {
     return transactionsData.map(parseTransactionData);
   } catch (error) {
     console.error('Error fetching ten latest transactions:', error);
-    throw error;
+    return [];
   }
 };
 
 // Fonction pour récupérer les détails d'une transaction spécifique
-export const getTransactionDetails = async (hash: string): Promise<Transaction> => {
+export const getTransactionDetails = async (hash: string): Promise<Transaction| null> => {
   try {
     const response = await axios.get(`${API_ENDPOINT}/transaction/hash/${hash}`);
     const transactionData = response.data;
     return parseTransactionData(transactionData);
   } catch (error) {
     console.error(`Error fetching transaction details for hash ${hash}:`, error);
-    throw error;
+    return null;
   }
 };
 
@@ -148,5 +139,70 @@ export const getBlockchainMetrics = async (): Promise<BlockchainMetrics> => {
       number_of_tx: "0",
       number_of_utxo: "0",
     };
+  }
+};
+
+
+// UTXO
+
+// Utilitaire pour parser les UTXO en fonction de leur type
+
+export const parseUTXOData = (data: any): UTXO => {
+  if (data.Coinbase) {
+    console.log(data.Coinbase);
+    const coinbaseUTXO: CoinbaseUTXO = {
+      version: data.Coinbase.version,
+      transaction_hash: data.Coinbase.transaction_hash,
+      output_index: data.Coinbase.output_index,
+      lic_key: data.Coinbase.lic_key,
+      unlock_time: data.Coinbase.unlock_time,
+      amount: data.Coinbase.amount,
+      currency: data.Coinbase.currency,
+      commitment: data.Coinbase.commitment,
+      rG: data.Coinbase.rG,
+      hash: data.Coinbase.hash,
+    };
+    console.log(coinbaseUTXO);
+    return coinbaseUTXO;
+  } else if (data.Exit) {
+    const exitUTXO: ExitUTXO = {
+      transaction_hash: data.Exit.transaction_hash,
+      output_index: data.Exit.output_index,
+      lic_key: data.Exit.lic_key,
+      unlock_time: data.Exit.unlock_time,
+      amount: data.Exit.amount,
+      currency: data.Exit.currency,
+      commitment: data.Exit.commitment,
+      exitChain: data.Exit.exitChain,
+      hash: data.Exit.hash,
+    };
+    return exitUTXO;
+  } else if (data.Payment) {
+    const paymentUTXO: PaymentUTXO = {
+      version: data.Payment.version,
+      transaction_hash: data.Payment.transaction_hash,
+      output_index: data.Payment.output_index,
+      lic_key: data.Payment.lic_key,
+      unlock_time: data.Payment.unlock_time,
+      amount: data.Payment.amount,
+      currency: data.Payment.currency,
+      commitment: data.Payment.commitment,
+      rG: data.Payment.rG,
+      hash: data.Payment.hash,
+    };
+    return paymentUTXO;
+  }
+  throw new Error('Unrecognized UTXO type');
+}
+
+// Fonction pour récupérer les détails d'une UTXO spécifique
+export const getUTXODetails = async (hash: string): Promise<UTXO | null > => {
+  try {
+    const response = await axios.get(`${API_ENDPOINT}/utxo/hash/${hash}`);
+    const transactionData = response.data;
+    return parseUTXOData(transactionData);
+  } catch (error) {
+    console.error(`Error fetching utxo details for hash ${hash}:`, error);
+    return null;
   }
 };
