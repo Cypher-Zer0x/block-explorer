@@ -69,7 +69,7 @@ const BlockDetailsPage: React.FC = () => {
     <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
       <Paper elevation={3} sx={{ p: 3 }}>
         <Typography variant="h4" gutterBottom sx={{ textAlign: 'center', mb: 3 }}>
-          <LinkIcon sx={{ mr: 1, verticalAlign: 'center', color:"primary.main" }} /> Block Details
+          <LinkIcon sx={{ mr: 1, verticalAlign: 'center', color: "primary.main" }} /> Block Details
         </Typography>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -89,14 +89,19 @@ const BlockDetailsPage: React.FC = () => {
               <TableRow>
                 <TableCell component="th" scope="row"><strong>Parent block</strong></TableCell>
                 <TableCell align="left">
-                <MuiLink component={RouterLink} to={`/block/${block.header.parent_block}`} color="primary" sx={{
-                    ':hover': {
-                      color: 'secondary.main',
-                    },
-                    display: 'block', // Assure que le lien prend toute la largeur pour l'effet de survol
-                  }}>
-                    {block.header.parent_block}
-                  </MuiLink>
+                  {block.header.parent_block !== "GENESIS" &&
+                    <MuiLink component={RouterLink} to={`/block/${block.header.parent_block}`} color="primary" sx={{
+                      ':hover': {
+                        color: 'secondary.main',
+                      },
+                      display: 'block', // Assure que le lien prend toute la largeur pour l'effet de survol
+                    }}>
+                      {block.header.parent_block}
+                    </MuiLink>
+                  }
+                  {block.header.parent_block === "GENESIS" &&
+                    <TableCell align="left">GENESIS</TableCell>
+                  }
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -112,57 +117,57 @@ const BlockDetailsPage: React.FC = () => {
         {block && block.transactions.length > 0 ? (
           <TableContainer component={Paper} sx={{ mt: 2 }}>
             <Table sx={{ minWidth: 650 }} aria-label="transactions table">
-            <TableBody>
-  {block.transactions.map((transaction, index) => {
-    // Déterminer le type de la transaction
-    const transactionType = transaction.UserDeposit ? "UserDeposit" : transaction.RingCT ? "RingCT" : "Unknown";
-    let transactionDetails : any;
-    let hash: string | null = null;
+              <TableBody>
+                {block.transactions.map((transaction, index) => {
+                  // Déterminer le type de la transaction
+                  const transactionType = transaction.UserDeposit ? "UserDeposit" : transaction.RingCT ? "RingCT" : "Unknown";
+                  let transactionDetails: any;
+                  let hash: string | null = null;
 
-    // Sélectionner les détails de la transaction et le hash en fonction du type
-    switch (transactionType) {
-      case "UserDeposit":
-        transactionDetails = transaction.UserDeposit;
-        hash = transactionDetails.hash;
-        break;
-      case "RingCT":
-        transactionDetails = transaction.RingCT;
-        hash = transactionDetails.hash;
-        break;
-      default:
-        // Gérer le cas inconnu ou ajouter d'autres types ici si nécessaire
-        break;
-    }
+                  // Sélectionner les détails de la transaction et le hash en fonction du type
+                  switch (transactionType) {
+                    case "UserDeposit":
+                      transactionDetails = transaction.UserDeposit;
+                      hash = transactionDetails.hash;
+                      break;
+                    case "RingCT":
+                      transactionDetails = transaction.RingCT;
+                      hash = transactionDetails.hash;
+                      break;
+                    default:
+                      // Gérer le cas inconnu ou ajouter d'autres types ici si nécessaire
+                      break;
+                  }
 
-    return (
-      <TableRow key={index}>
-        <TableCell component="th" scope="row">
-          Transaction Type: {transactionType === "UserDeposit" ? "User Deposit" : transactionType === "RingCT" ? "Ring Confidential" : "Unknown"}
-          </TableCell>
-          <TableCell align="left">
-            {hash ? (
-              <MuiLink component={RouterLink} to={`/transaction/${hash}`} color="primary" sx={{
-                ':hover': {
-                  color: 'secondary.main',
-                },
-                display: 'block',
-              }}>
-                {hash.substring(0, 50)}...
-              </MuiLink>
-            ) : 'Hash non disponible'}
-          </TableCell>
-          <TableCell align="left">
-            {transactionType === "UserDeposit" ? 
-              `TxID: ${transactionDetails.txId}` : 
-              transactionType === "RingCT" ?
-              `Inputs: ${transactionDetails.inputs.length}, Outputs: ${transactionDetails.outputs.length}` : 
-              'N/A'
-            }
-          </TableCell>
-          </TableRow>
-            );
-          })}
-        </TableBody>
+                  return (
+                    <TableRow key={index}>
+                      <TableCell component="th" scope="row">
+                        Transaction Type: {transactionType === "UserDeposit" ? "User Deposit" : transactionType === "RingCT" ? "Ring Confidential" : "Unknown"}
+                      </TableCell>
+                      <TableCell align="left">
+                        {hash ? (
+                          <MuiLink component={RouterLink} to={`/transaction/${hash}`} color="primary" sx={{
+                            ':hover': {
+                              color: 'secondary.main',
+                            },
+                            display: 'block',
+                          }}>
+                            {hash.substring(0, 50)}...
+                          </MuiLink>
+                        ) : 'Hash non disponible'}
+                      </TableCell>
+                      <TableCell align="left">
+                        {transactionType === "UserDeposit" ?
+                          `TxID: ${transactionDetails.txId}` :
+                          transactionType === "RingCT" ?
+                            `Inputs: ${transactionDetails.inputs.length}, Outputs: ${transactionDetails.outputs.length}` :
+                            'N/A'
+                        }
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
 
             </Table>
           </TableContainer>
