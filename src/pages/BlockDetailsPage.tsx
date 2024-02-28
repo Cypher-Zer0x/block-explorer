@@ -100,7 +100,7 @@ const BlockDetailsPage: React.FC = () => {
                     </MuiLink>
                   }
                   {block.header.parent_block === "GENESIS" &&
-                    <TableCell align="left">GENESIS</TableCell>
+                    <p>GENESIS</p>
                   }
                 </TableCell>
               </TableRow>
