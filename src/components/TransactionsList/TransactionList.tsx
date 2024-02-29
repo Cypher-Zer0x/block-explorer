@@ -26,6 +26,7 @@ const TransactionsList: React.FC = () => {
     const fetchTransactions = async () => {
       setIsLoading(true); // Active l'indicateur de chargement avant de lancer la requête
       const latestTransactions = await getTenLatestTransactions();
+      console.log("latestTransactions: ", latestTransactions);  
       setTransactions(latestTransactions);
       setIsLoading(false); // Désactive l'indicateur de chargement après avoir reçu les données
     };

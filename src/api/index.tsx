@@ -77,8 +77,7 @@ export const getBlockDetails = async (hash: string): Promise<BlockFromApi |null>
 // Utilitaire pour parser les transactions en fonction de leur type
 const parseTransactionData = (data: any): Transaction => {
   // Si la transaction contient un champ spécifique à UserDepositTx
-  console.log(data);
-  console.log(data.UserDeposit);
+  console.log("data", data);
   if (data.UserDeposit) {
     const userDepositTx: UserDepositTx = {
       txId: data.UserDeposit.txId,
@@ -88,11 +87,11 @@ const parseTransactionData = (data: any): Transaction => {
     return userDepositTx;
   }
   // Si la transaction contient un champ spécifique à RingCTx
-  else if (data.RingCTx) {
+  else if (data.RingCT) {
     const ringCTx: RingCTx = {
-      inputs: data.RingCTx.inputs,
-      outputs: data.RingCTx.outputs,
-      hash: data.RingCTx.hash,
+      inputs: data.RingCT.inputs,
+      outputs: data.RingCT.outputs,
+      hash: data.RingCT.hash,
     };
     return ringCTx;
   }
