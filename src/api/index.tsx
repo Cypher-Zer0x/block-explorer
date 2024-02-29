@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Block, Transaction, BlockchainMetrics, UserDepositTx, RingCTx, CoinbaseUTXO, ExitUTXO, PaymentUTXO, UTXO, TxFromApi, BlockFromApi } from '../types'; // Mise à jour des importations pour les nouveaux types
 
-const API_ENDPOINT = "http://localhost:8000"; // 'https://api.zer0x.xyz'; // Utilisez l'URL réelle de votre API
+const API_ENDPOINT = 'https://api.zer0x.xyz';
 
 // BLOCK
 export const getLatestBlock = async (): Promise<Block> => {
