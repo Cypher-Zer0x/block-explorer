@@ -141,7 +141,7 @@ const UTXODetailsPage: React.FC = () => {
                 <TableCell>{utxo.output_index}</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell component="th" scope="row"><strong>Lic Key</strong></TableCell>
+                <TableCell component="th" scope="row"><strong>Public Key</strong></TableCell>
                 <TableCell>{utxo.lic_key}</TableCell>
               </TableRow>
               <TableRow>
