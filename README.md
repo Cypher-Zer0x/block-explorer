@@ -1,6 +1,109 @@
-# Getting Started with Create React App
+# Getting Started with Cypher Zer0x - Block Explorer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+You can Monitor Zer0x chain by visiting (explorer.zer0x.xyz)[https://explorer.zer0x.xyz/].  
+The app interact with Zer0x nodes using API REST calls.
+You can use the API here : [api.zer0x.xyz](https://api.zer0x.xyz/)  
+
+# Available API routes :  
+## Metrics Endpoints
+
+### /metrics
+- *Method:* GET
+- *Description:* Fetches blockchain metrics.
+- *Usage:* Used to get an overview of the blockchain's current metrics.
+
+## Transaction (TX) Endpoints
+
+### /mempool
+- *Method:* GET
+- *Description:* Retrieves data about the current state of the mempool.
+- *Usage:* Useful for understanding the pending transactions waiting to be confirmed.
+
+### /utxo/set
+- *Method:* GET
+- *Description:* Fetches the set of UTXOs.
+- *Usage:* Enables querying of unspent transaction outputs, essential for transaction processing and wallet balance calculations.
+
+### /utxo/hash/:hash
+- *Method:* GET
+- *Description:* Retrieves UTXO data by its hash.
+- *Parameters:*
+  - hash: The hash of the UTXO.
+- *Usage:* Used for looking up specific UTXO details by hash.
+
+### /transaction/all
+- *Method:* GET
+- *Description:* Fetches data for all transactions.
+- *Note:* Consider adding a range mechanism to improve efficiency.
+- *Usage:* Allows retrieval of comprehensive transaction data, which may become inefficient without a range mechanism.
+
+### /transaction/hash/:tx_hash
+- *Method:* GET
+- *Description:* Retrieves transaction data by its hash.
+- *Parameters:*
+  - tx_hash: The hash of the transaction.
+- *Usage:* Useful for querying specific transactions directly.
+
+### /transaction/number
+- *Method:* GET
+- *Description:* Fetches the number of transactions.
+- *Usage:* Provides a count of all transactions processed.
+
+### /transaction/latest-ten
+- *Method:* GET
+- *Description:* Retrieves the latest ten transactions.
+- *Usage:* Offers a quick overview of the most recent transactions.
+
+## Block Endpoints
+
+### /block/all
+- *Method:* GET
+- *Description:* Fetches data for all blocks.
+- *Note:* Consider adding a range mechanism to improve efficiency.
+- *Usage:* Enables retrieval of all block data, which may become slow and inefficient without a range mechanism.
+
+### /block/hash/:block_hash
+- *Method:* GET
+- *Description:* Retrieves block data by its hash.
+- *Parameters:*
+  - block_hash: The hash of the block.
+- *Usage:* Allows for querying specific blocks directly.
+
+### /block/number/:block_number
+- *Method:* GET
+- *Description:* Fetches block data by block number.
+- *Parameters:*
+  - block_number: The number of the block.
+- *Usage:* Useful for retrieving blocks based on their height in the blockchain.
+
+### /block/range/:rangeData
+- *Method:* GET
+- *Description:* Retrieves a range of blocks.
+- *Parameters:*
+  - rangeData: Specifies the range of blocks to retrieve.
+- *Usage:* Facilitates the retrieval of blocks within a specific range.
+
+### /block/latest
+- *Method:* GET
+- *Description:* Fetches the latest block data.
+- *Usage:* Provides data on the most recently mined or produced block.
+
+### /block/latest-ten
+- *Method:* GET
+- *Description:* Retrieves the latest ten blocks.
+- *Usage:* Offers a snapshot of the ten most recent blocks.
+
+### /block/total-number
+- *Method:* GET
+- *Description:* Fetches the total number of blocks.
+- *Usage:* Gives the total count of blocks in the blockchain.
+
+## User Operation Endpoints
+
+### /ringct
+- *Method:* POST
+- *Description:* Handles RingCT (Ring Confidential Transactions) operations.
+- *Usage:* Enables users to perform RingCT transactions, enhancing privacy by concealing the amount transferred.
 
 ## Available Scripts
 
@@ -28,19 +131,3 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
