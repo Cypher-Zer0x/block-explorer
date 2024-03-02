@@ -87,6 +87,7 @@ const TransactionDetailsPage: React.FC = () => {
               </TableRow>
               <TableRow>
                 <TableCell component="th" scope="row"><strong>Output/UTXOs</strong></TableCell>
+                <TableCell>{Array.isArray(transaction.output) ? transaction.output.join(',') : transaction.output}</TableCell>
                 <TableCell>
                   <MuiLink component={RouterLink} to={`/utxoDetails/${transaction.output}`} sx={{ marginRight: 2 }}>
                   </MuiLink>
