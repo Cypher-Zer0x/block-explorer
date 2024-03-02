@@ -12,6 +12,7 @@ import {
   TableCell,
   TableRow,
   TableContainer,
+  Chip,
 } from '@mui/material';
 import { Link as MuiLink } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
@@ -19,9 +20,11 @@ import LinkIcon from '@mui/icons-material/Link';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { timeSince } from '../utils/Timestamp';
+import { getState } from '../api';
 
 const BlockDetailsPage: React.FC = () => {
   const [block, setBlock] = useState<BlockFromApi | null>(null);
+  const [state, setState] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { hash } = useParams<{ hash: string }>();
 
@@ -38,7 +41,18 @@ const BlockDetailsPage: React.FC = () => {
         }
       };
 
+      const fetchState = async () => {
+        try {
+          const state = await getState();
+          setState(state);
+        } catch (error) {
+          setState(null);
+          console.error(`Error fetching state:`, error);
+        }
+      }
+
       fetchBlockDetails();
+      fetchState();
     } else {
       setError('Block hash is undefined');
     }
@@ -70,6 +84,13 @@ const BlockDetailsPage: React.FC = () => {
       <Paper elevation={3} sx={{ p: 3 }}>
         <Typography variant="h4" gutterBottom sx={{ textAlign: 'center', mb: 3 }}>
           <LinkIcon sx={{ mr: 1, verticalAlign: 'center', color: "primary.main" }} /> Block Details
+        </Typography>
+        <Typography>
+        <Chip
+          label={state && state >= Number(block.header.block_number) ? "Committed" : "Waiting for commitment"}
+          color={state && state >= Number(block.header.block_number) ? "success" : "error"}
+          sx={{ ml: 1 }}
+        />
         </Typography>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">

@@ -73,6 +73,17 @@ export const getBlockDetails = async (hash: string): Promise<BlockFromApi |null>
   }
 };
 
+export const getState = async (): Promise<number> => {
+  try {
+    const response = await axios.get(`${API_ENDPOINT}/state/block/current`);
+    console.log("state", response.data);
+    return Number(response.data);
+  } catch (error) {
+    console.error('Error fetching state:', error);
+    return 0;
+  }
+};
+
 // TRANSACTION
 // Utilitaire pour parser les transactions en fonction de leur type
 const parseTransactionData = (data: any): Transaction => {
