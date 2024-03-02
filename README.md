@@ -98,6 +98,18 @@ You can use the API here : [api.zer0x.xyz](https://api.zer0x.xyz/)
 - *Description:* Fetches the total number of blocks.
 - *Usage:* Gives the total count of blocks in the blockchain.
 
+## State Endpoints
+
+### /state/current
+- *Method:* GET
+- *Description:* Fetches the last proven state of the network.
+- *Usage:* Gives the last proven state as a merkle root of block hash.
+
+### /state/block/current
+- *Method:* GET
+- *Description:* Fetches the last proven block number of the network.
+- *Usage:* Gives the last proven block number.
+
 ## User Operation Endpoints
 
 ### /ringct
